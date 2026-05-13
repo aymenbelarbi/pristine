@@ -1,0 +1,21 @@
+[package]
+name = "pristine-mcp"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine MCP server"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+pristine-domain = { path = "../pristine-domain" }
+pristine-acquire = { path = "../pristine-acquire" }
+pristine-inventory = { path = "../pristine-inventory" }
+pristine-extract = { path = "../pristine-extract" }
+pristine-select = { path = "../pristine-select" }
+pristine-compress = { path = "../pristine-compress" }
+pristine-safety = { path = "../pristine-safety" }
+pristine-cache = { path = "../pristine-cache" }
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true

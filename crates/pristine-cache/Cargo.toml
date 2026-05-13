@@ -1,0 +1,14 @@
+[package]
+name = "pristine-cache"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine caching layer"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+pristine-domain = { path = "../pristine-domain" }
+moka.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true

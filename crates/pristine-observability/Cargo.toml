@@ -1,0 +1,14 @@
+[package]
+name = "pristine-observability"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine metrics, logging, and tracing"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+metrics.workspace = true
+metrics-exporter-prometheus.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+serde.workspace = true
