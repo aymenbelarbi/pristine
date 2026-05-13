@@ -1,80 +1,172 @@
 //! Core domain types for Pristine
+//!
+//! This module contains all the fundamental types used throughout the Pristine
+//! codebase. These types represent the data structures for artifact requests,
+//! file records, selection decisions, and context artifacts.
 
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
-/// Source reference for repository location
+/// Source reference for repository location.
+///
+/// A `SourceRef` identifies where a repository can be found and optionally
+/// specifies a particular revision or subpath within the repository.
+///
+/// # Examples
+///
+/// ```
+/// use pristine_core::SourceRef;
+///
+/// // Local repository
+/// let local = SourceRef::local("/path/to/project");
+///
+/// // GitHub repository with revision
+/// let github = SourceRef::github("https://github.com/user/repo")
+///     .with_revision("main")
+///     .with_subpath("src/");
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct SourceRef {
+    /// The type of source (local, GitHub, GitLab)
     pub kind: SourceKind,
+    /// The URL or path to the repository
     pub locator: String,
+    /// Optional git revision (branch, tag, or commit SHA)
     pub revision: Option<String>,
+    /// Optional subdirectory path within the repository
     pub subpath: Option<String>,
 }
 
-/// Type of source repository
+/// Type of source repository.
+///
+/// Indicates where the repository is hosted or how it can be accessed.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub enum SourceKind {
+    /// Local filesystem path
     Local,
+    /// GitHub repository
     GitHub,
+    /// GitLab repository
     GitLab,
 }
 
-/// Request for artifact generation
+/// Request for artifact generation.
+///
+/// An `ArtifactRequest` contains all the parameters needed to generate
+/// a context artifact, including the source repository, profile, query,
+/// and various configuration options.
+///
+/// # Examples
+///
+/// ```
+/// use pristine_core::*;
+///
+/// let request = ArtifactRequest {
+///     source: SourceRef::github("https://github.com/user/repo"),
+///     profile: Profile::Overview,
+///     query: None,
+///     diff: None,
+///     policy: PolicyConfig::default(),
+///     budget: BudgetConfig::default(),
+///     output: OutputConfig::default(),
+/// };
+/// ```
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ArtifactRequest {
+    /// The source repository to process
     pub source: SourceRef,
+    /// The profile determining the type of artifact to generate
     pub profile: Profile,
+    /// Optional query for task-focused context
     pub query: Option<String>,
+    /// Optional diff specification for review artifacts
     pub diff: Option<DiffSpec>,
+    /// Policy configuration for safety and security
     pub policy: PolicyConfig,
+    /// Budget configuration for token and file limits
     pub budget: BudgetConfig,
+    /// Output configuration for format and content
     pub output: OutputConfig,
 }
 
-/// Repository snapshot after acquisition
+/// Repository snapshot after acquisition.
+///
+/// A `RepoSnapshot` represents a point-in-time copy of a repository
+/// that has been acquired and is ready for processing.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RepoSnapshot {
+    /// Unique identifier for this snapshot
     pub snapshot_id: String,
+    /// Root directory of the snapshot on the filesystem
     pub root: PathBuf,
+    /// The resolved git revision (if applicable)
     pub revision: Option<String>,
+    /// The source reference used to create this snapshot
     pub source: SourceRef,
+    /// Timestamp when the snapshot was created
     pub created_at: DateTime<Utc>,
 }
 
-/// File record from inventory
+/// File record from inventory.
+///
+/// A `FileRecord` contains metadata about a single file found during
+/// the inventory phase, including its path, size, language, and tags.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileRecord {
+    /// Absolute path to the file
     pub path: String,
+    /// Relative path from the repository root
     pub relative_path: String,
+    /// File size in bytes
     pub size_bytes: u64,
+    /// Detected programming language (if any)
     pub language: Option<Language>,
+    /// Whether the file is binary
     pub is_binary: bool,
+    /// Semantic tags assigned during classification
     pub tags: Vec<FileTag>,
+    /// Directory depth from repository root
     pub depth: u32,
+    /// Last modification timestamp (if available)
     pub last_modified: Option<DateTime<Utc>>,
 }
 
-/// Selection decision for a file
+/// Selection decision for a file.
+///
+/// A `SelectionDecision` represents the engine's decision about whether
+/// and how to include a file in the final artifact.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SelectionDecision {
+    /// Path to the file
     pub path: String,
+    /// The inclusion level assigned to this file
     pub inclusion: InclusionLevel,
+    /// Reasons for the selection decision
     pub reasons: Vec<SelectionReason>,
+    /// Estimated token count for this file
     pub estimated_tokens: Option<u32>,
+    /// Relevance score assigned by the selection engine
     pub score: f64,
 }
 
-/// Final context artifact
+/// Final context artifact.
+///
+/// A `ContextArtifact` is the output of the Pristine pipeline, containing
+/// the selected and processed files along with metadata and statistics.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ContextArtifact {
+    /// The type of artifact (overview, task, review, agent, safe)
     pub artifact_type: ArtifactType,
+    /// Metadata about the artifact generation
     pub metadata: ArtifactMetadata,
+    /// The file units included in the artifact
     pub file_units: Vec<RenderedFileUnit>,
+    /// Statistics about the artifact
     pub stats: ArtifactStats,
+    /// Any warnings generated during processing
     pub warnings: Vec<ArtifactWarning>,
 }
 

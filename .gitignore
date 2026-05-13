@@ -29,6 +29,14 @@ build/
 # Logs
 *.log
 
-# Markdown files (except README.md)
-*.md
-!README.md
+# Plan files (should not be in repository)
+pristine-comprehensive-architecture-development-plan.md
+IMPROVED_PLAN.md
+analysis-and-index.md
+PROJECT_STRUCTURE_PLAN.md
+
+# Documentation markdown files are allowed
+!docs/
+!CONTRIBUTING.md
+!LICENSE-MIT
+!LICENSE-APACHE
