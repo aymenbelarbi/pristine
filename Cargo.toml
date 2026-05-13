@@ -38,7 +38,7 @@ clap = { version = "4", features = ["derive", "env"] }
 # HTTP
 axum = { version = "0.7", features = ["macros"] }
 tower = "0.4"
-tower-http = { version = "0.5", features = ["cors", "trace", "compression"] }
+tower-http = { version = "0.5", features = ["cors", "trace", "compression-br"] }
 
 # Git operations
 git2 = "0.18"

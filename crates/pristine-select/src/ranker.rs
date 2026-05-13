@@ -17,7 +17,7 @@ impl FileRanker {
     }
     
     /// Get top N files
-    pub fn top_n(&self, decisions: &[SelectionDecision], n: usize) -> Vec<&SelectionDecision> {
+    pub fn top_n<'a>(&self, decisions: &'a [SelectionDecision], n: usize) -> Vec<&'a SelectionDecision> {
         let mut sorted: Vec<_> = decisions.iter().collect();
         sorted.sort_by(|a, b| b.score.partial_cmp(&a.score).unwrap());
         sorted.into_iter().take(n).collect()

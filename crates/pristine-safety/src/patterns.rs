@@ -1,6 +1,7 @@
 //! Secret detection patterns
 
-/// Built-in secret patterns
+/// Built-in secret patterns: (name, regex_pattern, description)
+/// Note: Using regular strings with escaped backslashes for patterns containing quotes
 pub const BUILTIN_PATTERNS: &[(&str, &str, &str)] = &[
     (
         "aws_access_key",
@@ -9,7 +10,7 @@ pub const BUILTIN_PATTERNS: &[(&str, &str, &str)] = &[
     ),
     (
         "aws_secret_key",
-        r"(?i)aws[_-]?secret[_-]?access[_-]?key\s*[:=]\s*['""][a-zA-Z0-9/+=]{40}['""]",
+        "(?i)aws[_-]?secret[_-]?access[_-]?key\\s*[:=]\\s*[\"'][a-zA-Z0-9/+=]{40}[\"']",
         "AWS Secret Access Key",
     ),
     (
@@ -29,7 +30,7 @@ pub const BUILTIN_PATTERNS: &[(&str, &str, &str)] = &[
     ),
     (
         "api_key_generic",
-        r"(?i)(api[_-]?key|apikey)\s*[:=]\s*['""][a-zA-Z0-9_\-]{32,}['""]",
+        "(?i)(api[_-]?key|apikey)\\s*[:=]\\s*[\"'][a-zA-Z0-9_\\-]{32,}[\"']",
         "Generic API Key",
     ),
     (
@@ -49,7 +50,7 @@ pub const BUILTIN_PATTERNS: &[(&str, &str, &str)] = &[
     ),
     (
         "heroku_api_key",
-        r"(?i)heroku[_-]?api[_-]?key\s*[:=]\s*['""][a-f0-9]{32}['""]",
+        "(?i)heroku[_-]?api[_-]?key\\s*[:=]\\s*[\"'][a-f0-9]{32}[\"']",
         "Heroku API Key",
     ),
 ];

@@ -11,3 +11,5 @@ pristine-domain = { path = "../pristine-domain" }
 encoding_rs.workspace = true
 tokio.workspace = true
 serde.workspace = true
+async-trait.workspace = true
+tracing.workspace = true

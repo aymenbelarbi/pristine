@@ -1,30 +1,31 @@
 //! Cache manager
 
 use async_trait::async_trait;
-use moka::future::Cache;
+use moka::future::Cache as MokaCache;
 use pristine_core::*;
+use crate::CacheConfig;
 use std::time::Duration;
 
 /// Cache manager for Pristine
 pub struct CacheManager {
-    snapshot_cache: Cache<String, RepoSnapshot>,
-    inventory_cache: Cache<String, FileCatalog>,
-    artifact_cache: Cache<String, ContextArtifact>,
+    snapshot_cache: MokaCache<String, RepoSnapshot>,
+    inventory_cache: MokaCache<String, FileCatalog>,
+    artifact_cache: MokaCache<String, ContextArtifact>,
 }
 
 impl CacheManager {
     /// Create a new cache manager
     pub fn new(config: CacheConfig) -> Self {
         Self {
-            snapshot_cache: Cache::builder()
+            snapshot_cache: MokaCache::builder()
                 .max_capacity(config.max_snapshot_entries)
                 .time_to_live(Duration::from_secs(config.snapshot_ttl_seconds))
                 .build(),
-            inventory_cache: Cache::builder()
+            inventory_cache: MokaCache::builder()
                 .max_capacity(config.max_inventory_entries)
                 .time_to_live(Duration::from_secs(config.inventory_ttl_seconds))
                 .build(),
-            artifact_cache: Cache::builder()
+            artifact_cache: MokaCache::builder()
                 .max_capacity(config.max_artifact_entries)
                 .time_to_live(Duration::from_secs(config.artifact_ttl_seconds))
                 .build(),
@@ -56,7 +57,7 @@ impl Default for CacheManager {
 }
 
 #[async_trait]
-impl Cache for CacheManager {
+impl pristine_core::Cache for CacheManager {
     async fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> Result<Option<T>> {
         // Simplified implementation
         Ok(None)

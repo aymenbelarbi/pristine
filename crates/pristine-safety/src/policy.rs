@@ -22,13 +22,9 @@ impl Default for PolicyEnforcer {
 #[async_trait]
 impl PolicyEnforce for PolicyEnforcer {
     async fn check_file(&self, file: &FileRecord, policy: &PolicyConfig) -> Result<PolicyResult> {
-        // Check block patterns
+        // Check block patterns using simple glob matching
         for pattern in &policy.block_patterns {
-            if globset::Glob::new(pattern)
-                .map_err(|e| PristineError::General(format!("Invalid glob pattern: {}", e)))?
-                .compile_matcher()
-                .is_match(&file.path)
-            {
+            if glob_match(pattern, &file.path) {
                 return Ok(PolicyResult {
                     allowed: false,
                     action: PolicyAction::Block,
@@ -78,4 +74,30 @@ impl PolicyEnforce for PolicyEnforcer {
             })
         }
     }
+}
+
+/// Simple glob pattern matching
+fn glob_match(pattern: &str, path: &str) -> bool {
+    // Handle ** (match any directories)
+    if pattern.contains("**") {
+        let parts: Vec<&str> = pattern.split("**").collect();
+        if parts.len() == 2 {
+            let prefix = parts[0];
+            let suffix = parts[1];
+            return path.starts_with(prefix) && path.ends_with(suffix);
+        }
+    }
+    
+    // Handle * (match any characters except /)
+    if pattern.contains('*') {
+        let regex_pattern = pattern
+            .replace(".", "\\.")
+            .replace("*", "[^/]*");
+        if let Ok(regex) = regex::Regex::new(&format!("^{}$", regex_pattern)) {
+            return regex.is_match(path);
+        }
+    }
+    
+    // Exact match
+    path == pattern
 }

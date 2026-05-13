@@ -10,11 +10,11 @@ use pristine_core::*;
 struct Cli {
     #[command(subcommand)]
     command: Commands,
-    
+
     /// Configuration file path
     #[arg(long, global = true)]
     config: Option<String>,
-    
+
     /// Enable verbose output
     #[arg(long, short, global = true)]
     verbose: bool,
@@ -33,8 +33,8 @@ enum Commands {
         #[arg(long)]
         subpath: Option<String>,
         /// Output format
-        #[arg(long, value_enum, default_value = "markdown")]
-        format: OutputFormat,
+        #[arg(long, default_value = "markdown")]
+        format: String,
         /// Output file (default: stdout)
         #[arg(long, short)]
         output: Option<String>,
@@ -59,8 +59,8 @@ enum Commands {
         #[arg(long)]
         max_tokens: Option<u32>,
         /// Output format
-        #[arg(long, value_enum, default_value = "markdown")]
-        format: OutputFormat,
+        #[arg(long, default_value = "markdown")]
+        format: String,
         /// Output file
         #[arg(long, short)]
         output: Option<String>,
@@ -79,8 +79,8 @@ enum Commands {
         #[arg(long)]
         head: String,
         /// Output format
-        #[arg(long, value_enum, default_value = "markdown")]
-        format: OutputFormat,
+        #[arg(long, default_value = "markdown")]
+        format: String,
         /// Output file
         #[arg(long, short)]
         output: Option<String>,
@@ -96,8 +96,8 @@ enum Commands {
         #[arg(long)]
         revision: Option<String>,
         /// Output format
-        #[arg(long, value_enum, default_value = "json")]
-        format: OutputFormat,
+        #[arg(long, default_value = "json")]
+        format: String,
         /// Output file
         #[arg(long, short)]
         output: Option<String>,
@@ -110,11 +110,11 @@ enum Commands {
         #[arg(long)]
         revision: Option<String>,
         /// Policy mode
-        #[arg(long, value_enum, default_value = "redact")]
-        policy: PolicyMode,
+        #[arg(long, default_value = "redact")]
+        policy: String,
         /// Output format
-        #[arg(long, value_enum, default_value = "markdown")]
-        format: OutputFormat,
+        #[arg(long, default_value = "markdown")]
+        format: String,
         /// Output file
         #[arg(long, short)]
         output: Option<String>,
@@ -136,59 +136,155 @@ enum ConfigAction {
     Show,
 }
 
+/// Parse output format from string
+fn parse_output_format(s: &str) -> Result<OutputFormat> {
+    match s.to_lowercase().as_str() {
+        "json" => Ok(OutputFormat::Json),
+        "markdown" | "md" => Ok(OutputFormat::Markdown),
+        "xml" => Ok(OutputFormat::Xml),
+        "text" | "txt" => Ok(OutputFormat::Text),
+        _ => Err(PristineError::InvalidSource(format!(
+            "Unknown output format: {}",
+            s
+        ))),
+    }
+}
+
+/// Parse policy mode from string
+fn parse_policy_mode(s: &str) -> Result<PolicyMode> {
+    match s.to_lowercase().as_str() {
+        "allow" => Ok(PolicyMode::Allow),
+        "redact" => Ok(PolicyMode::Redact),
+        "fail" => Ok(PolicyMode::Fail),
+        _ => Err(PristineError::InvalidSource(format!(
+            "Unknown policy mode: {}",
+            s
+        ))),
+    }
+}
+
 #[tokio::main]
 async fn main() {
     let cli = Cli::parse();
-    
+
     // Initialize tracing
     let filter = if cli.verbose {
         "pristine=debug"
     } else {
         "pristine=info"
     };
-    
+
     tracing_subscriber::fmt()
         .with_env_filter(filter)
         .init();
-    
+
     match cli.command {
-        Commands::Overview { source, revision, subpath, format, output, explain } => {
+        Commands::Overview {
+            source,
+            revision: _,
+            subpath: _,
+            format,
+            output: _,
+            explain: _,
+        } => {
+            let _format = match parse_output_format(&format) {
+                Ok(f) => f,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            };
             tracing::info!("Generating overview for: {}", source);
-            // Placeholder implementation
             println!("Overview pack for: {}", source);
         }
-        Commands::Pack { source, query, revision, subpath, max_tokens, format, output, explain } => {
+        Commands::Pack {
+            source,
+            query: _,
+            revision: _,
+            subpath: _,
+            max_tokens: _,
+            format,
+            output: _,
+            explain: _,
+        } => {
+            let _format = match parse_output_format(&format) {
+                Ok(f) => f,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            };
             tracing::info!("Generating pack for: {}", source);
-            // Placeholder implementation
             println!("Task pack for: {}", source);
         }
-        Commands::ReviewDiff { source, base, head, format, output, explain } => {
+        Commands::ReviewDiff {
+            source,
+            base,
+            head,
+            format,
+            output: _,
+            explain: _,
+        } => {
+            let _format = match parse_output_format(&format) {
+                Ok(f) => f,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            };
             tracing::info!("Generating review diff for: {}", source);
-            // Placeholder implementation
             println!("Review pack for: {}..{}", base, head);
         }
-        Commands::Agent { source, revision, format, output } => {
+        Commands::Agent {
+            source,
+            revision: _,
+            format,
+            output: _,
+        } => {
+            let _format = match parse_output_format(&format) {
+                Ok(f) => f,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            };
             tracing::info!("Generating agent pack for: {}", source);
-            // Placeholder implementation
             println!("Agent pack for: {}", source);
         }
-        Commands::SafeShare { source, revision, policy, format, output } => {
+        Commands::SafeShare {
+            source,
+            revision: _,
+            policy,
+            format,
+            output: _,
+        } => {
+            let _policy = match parse_policy_mode(&policy) {
+                Ok(p) => p,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            };
+            let _format = match parse_output_format(&format) {
+                Ok(f) => f,
+                Err(e) => {
+                    eprintln!("Error: {}", e);
+                    std::process::exit(1);
+                }
+            };
             tracing::info!("Generating safe share for: {}", source);
-            // Placeholder implementation
             println!("Safe pack for: {}", source);
         }
-        Commands::Config { action } => {
-            match action {
-                ConfigAction::Init => {
-                    println!("Initializing configuration file...");
-                }
-                ConfigAction::Validate => {
-                    println!("Validating configuration file...");
-                }
-                ConfigAction::Show => {
-                    println!("Showing current configuration...");
-                }
+        Commands::Config { action } => match action {
+            ConfigAction::Init => {
+                println!("Initializing configuration file...");
             }
-        }
+            ConfigAction::Validate => {
+                println!("Validating configuration file...");
+            }
+            ConfigAction::Show => {
+                println!("Showing current configuration...");
+            }
+        },
     }
 }

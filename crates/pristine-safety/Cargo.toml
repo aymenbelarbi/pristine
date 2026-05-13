@@ -11,3 +11,5 @@ pristine-domain = { path = "../pristine-domain" }
 regex.workspace = true
 serde.workspace = true
 tokio.workspace = true
+async-trait.workspace = true
+tracing.workspace = true

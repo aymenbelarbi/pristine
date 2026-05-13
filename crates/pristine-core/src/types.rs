@@ -459,7 +459,7 @@ impl FileRecord {
     }
 
     /// Check if the file is a test file
-    pub fn is_test(&self) -> Self {
+    pub fn is_test(&self) -> bool {
         self.tags.contains(&FileTag::Test)
     }
 

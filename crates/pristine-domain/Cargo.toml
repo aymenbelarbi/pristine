@@ -10,3 +10,6 @@ pristine-core = { path = "../pristine-core" }
 serde.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
+tracing.workspace = true
+chrono.workspace = true
+num_cpus = "1"

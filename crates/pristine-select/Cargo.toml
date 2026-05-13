@@ -10,3 +10,5 @@ pristine-core = { path = "../pristine-core" }
 pristine-domain = { path = "../pristine-domain" }
 serde.workspace = true
 tokio.workspace = true
+async-trait.workspace = true
+tracing.workspace = true
