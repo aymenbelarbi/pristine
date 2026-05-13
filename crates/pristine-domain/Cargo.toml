@@ -1,0 +1,12 @@
+[package]
+name = "pristine-domain"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine domain business logic"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+serde.workspace = true
+thiserror.workspace = true
+tokio.workspace = true

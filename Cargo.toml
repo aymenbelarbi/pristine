@@ -1,0 +1,115 @@
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT"
+repository = "https://github.com/aymenbelarbi/pristine"
+authors = ["Aymen Belarbi <aymen@pristine.dev>"]
+description = "Pristine - Code Context Compiler"
+homepage = "https://pristine.dev"
+documentation = "https://docs.pristine.dev"
+keywords = ["code", "context", "compiler", "ai", "mcp"]
+categories = ["command-line-utilities", "development-tools"]
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+
+# Error handling
+thiserror = "1"
+anyhow = "1"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# CLI
+clap = { version = "4", features = ["derive", "env"] }
+
+# HTTP
+axum = { version = "0.7", features = ["macros"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace", "compression"] }
+
+# Git operations
+git2 = "0.18"
+
+# Pattern matching
+ignore = "0.4"
+globset = "0.4"
+
+# Validation
+validator = { version = "0.16", features = ["derive"] }
+
+# Configuration
+figment = { version = "0.10", features = ["yaml", "env"] }
+
+# Caching
+moka = { version = "0.12", features = ["future"] }
+
+# Metrics
+metrics = "0.22"
+metrics-exporter-prometheus = "0.13"
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Async utilities
+futures = "0.3"
+async-trait = "0.1"
+
+# File operations
+tempfile = "3"
+walkdir = "2"
+
+# Encoding
+encoding_rs = "0.8"
+
+# Regex
+regex = "1"
+
+# Tree-sitter
+tree-sitter = "0.22"
+tree-sitter-rust = "0.21"
+tree-sitter-python = "0.21"
+tree-sitter-typescript = "0.21"
+tree-sitter-javascript = "0.21"
+tree-sitter-go = "0.21"
+
+# HTTP client
+reqwest = { version = "0.11", features = ["json"] }
+
+# Token counting
+tiktoken-rs = "0.5"
+
+# Testing
+insta = { version = "1", features = ["json"] }
+assert_cmd = "2"
+predicates = "3"
+criterion = "0.5"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.bench]
+opt-level = 3
+debug = false

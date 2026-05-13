@@ -1,0 +1,12 @@
+[package]
+name = "pristine-select"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine file selection engine"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+pristine-domain = { path = "../pristine-domain" }
+serde.workspace = true
+tokio.workspace = true

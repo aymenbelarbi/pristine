@@ -1,0 +1,14 @@
+[package]
+name = "pristine-inventory"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine file system traversal"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+pristine-domain = { path = "../pristine-domain" }
+ignore.workspace = true
+walkdir.workspace = true
+tokio.workspace = true
+serde.workspace = true

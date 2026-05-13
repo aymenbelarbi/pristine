@@ -1,0 +1,13 @@
+[package]
+name = "pristine-safety"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Pristine secret scanning and safety"
+
+[dependencies]
+pristine-core = { path = "../pristine-core" }
+pristine-domain = { path = "../pristine-domain" }
+regex.workspace = true
+serde.workspace = true
+tokio.workspace = true
