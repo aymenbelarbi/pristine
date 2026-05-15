@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pristine - Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: 'hsl(var(--border))',
+                        background: 'hsl(var(--background))',
+                        foreground: 'hsl(var(--foreground))',
+                        primary: {
+                            DEFAULT: 'hsl(var(--primary))',
+                            foreground: 'hsl(var(--primary-foreground))',
+                        },
+                        muted: {
+                            DEFAULT: 'hsl(var(--muted))',
+                            foreground: 'hsl(var(--muted-foreground))',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --primary: 222.2 47.4% 11.2%;
+            --primary-foreground: 210 40% 98%;
+            --muted: 210 40% 96.1%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --border: 214.3 31.8% 91.4%;
+        }
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --primary: 210 40% 98%;
+            --primary-foreground: 222.2 47.4% 11.2%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --border: 217.2 32.6% 17.5%;
+        }
+        body { @apply bg-background text-foreground; }
+    </style>
+</head>
+<body class="dark">
+    <div class="max-w-5xl mx-auto space-y-12 p-8">
+        <div class="text-center space-y-4">
+            <h1 class="text-4xl font-bold tracking-tight">Code Context Compiler</h1>
+            <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Generate optimized context artifacts for any codebase. Perfect for AI-assisted development.
+            </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h3 class="text-base font-semibold">Smart Context Extraction</h3>
+                <p class="text-sm text-muted-foreground mt-2">Automatically identifies and extracts the most relevant files from any codebase.</p>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h3 class="text-base font-semibold">Token Budget Control</h3>
+                <p class="text-sm text-muted-foreground mt-2">Set token limits to optimize for your LLM context window.</p>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h3 class="text-base font-semibold">Privacy First</h3>
+                <p class="text-sm text-muted-foreground mt-2">Process locally or self-host. Your code never leaves your infrastructure.</p>
+            </div>
+            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+                <h3 class="text-base font-semibold">Git Native</h3>
+                <p class="text-sm text-muted-foreground mt-2">Works with any Git repository. Supports branches, commits, and PRs.</p>
+            </div>
+        </div>
+
+        <div class="space-y-4">
+            <h2 class="text-2xl font-semibold text-center">Get Started</h2>
+            <div class="max-w-2xl mx-auto">
+                <form class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium">Repository URL</label>
+                        <input type="url" placeholder="https://github.com/user/repo" class="w-full px-3 py-2 border rounded-md bg-background">
+                    </div>
+                    <button type="submit" class="w-full px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
+                        Generate Context Pack
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test API connection
+        fetch('/api/v1/health')
+            .then(r => r.json())
+            .then(data => console.log('API Health:', data))
+            .catch(err => console.error('API Error:', err));
+    </script>
+</body>
+</html>
