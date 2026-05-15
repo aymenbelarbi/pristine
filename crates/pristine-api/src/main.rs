@@ -28,6 +28,7 @@ struct HealthResponse {
 fn create_router() -> Router<AppState> {
     Router::new()
         .route("/health", get(health_check))
+        .route("/v1/health", get(health_check))
         .route("/v1/artifacts/overview", post(create_overview))
         .route("/v1/artifacts/pack", post(create_pack))
         .route("/v1/artifacts/review-diff", post(create_review_diff))
@@ -145,7 +146,7 @@ async fn main() {
     let state = AppState {};
     let app = create_router().with_state(state);
     
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080")
         .await
         .expect("Failed to bind to port 8080");
     
